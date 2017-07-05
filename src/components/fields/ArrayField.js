@@ -45,8 +45,8 @@ function IconBtn(props) {
 
 // Used in the two templates
 function DefaultArrayItem(props) {
-  console.log("children", props.children);
   const btnStyle = {flex: 1, paddingLeft: 6, paddingRight: 6, fontWeight: "bold"};
+  console.log("props.children", props.children);
   return (
     <div key={props.index} className={props.className}>
 
@@ -120,6 +120,7 @@ function DefaultFixedArrayFieldTemplate(props) {
 }
 
 function DefaultNormalArrayFieldTemplate(props) {
+  console.log("props", props);
   return (
     <fieldset className={props.className}>
 
@@ -169,21 +170,18 @@ class ArrayField extends Component {
       // We need to construct the initial anyOfItems state, by searching for the props anyOf items
       // in the available anyOf schema items
       anyOfItems = this.getAnyOfItemsFromProps(formData.items, props.schema.items.anyOf);
-      console.log("anyOfItems", anyOfItems);
     }
     this.state = {formData: formData, anyOfItems: anyOfItems};
   }
 
   componentWillReceiveProps(nextProps) {
     const newState = Object.assign({}, this.state, {formData: this.getStateFromProps(nextProps)});
-    console.log("newState", newState);
     this.setState(newState);
   }
 
   getStateFromProps(props) {
     const formData = Array.isArray(props.formData) ? props.formData : null;
     const {definitions} = this.props.registry;
-    console.log("getDefaultFormState", getDefaultFormState(props.schema, formData, definitions));
     return {
       items: getDefaultFormState(props.schema, formData, definitions) || []
     };
@@ -197,7 +195,6 @@ class ArrayField extends Component {
     return formDataItems.map((item) => {
       const type = typeof item;
       const itemType = (type === "object" && Array.isArray(item)) ? "array" : type;
-      console.log(type, itemType);
       const schema = this.getAnyOfItemSchema(anyOfSchema, itemType);
 
       // If this schema is an array, we need to recursively add its contents
@@ -335,7 +332,6 @@ class ArrayField extends Component {
   }
 
   setWidgetType(index, value) {
-    console.log("setWidgetType", index, value);
     const {items} = this.state.formData;
     const {registry} = this.props;
     const {definitions} = registry;
@@ -389,6 +385,8 @@ class ArrayField extends Component {
     let itemsSchema = retrieveSchema(schema.items, definitions);
     const {addable=true} = getUiOptions(uiSchema);
     const anyOfItemsSchema = this.getAnyOfItemsSchema();
+
+    console.log("schema", anyOfItemsSchema);
 
     const arrayProps = {
       canAdd: addable,

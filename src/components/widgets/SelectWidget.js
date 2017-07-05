@@ -16,7 +16,7 @@ function processValue({type, items}, value) {
   } else if (type === "number") {
     return asNumber(value);
   }
-  console.log("test", value);
+  // console.log("test", value);
   return value;
 }
 
@@ -46,14 +46,14 @@ function SelectWidget({
   placeholder
 }) {
   const {enumOptions} = options;
-  const emptyValue = multiple ? [] : "";
+  // const emptyValue = multiple ? [] : "";
   console.log("enumOptions",enumOptions);
   return (
     <select
       id={id}
       multiple={multiple}
       className="form-control"
-      value={typeof value === "undefined" ? emptyValue : value}
+      // value={typeof value === "undefined" ? emptyValue : value}
       required={required}
       disabled={disabled}
       readOnly={readonly}
@@ -63,15 +63,18 @@ function SelectWidget({
         onBlur(id, processValue(schema, newValue));
       })}
       onChange={(event) => {
-        console.log("event.target", event.target.selectedIndex);
-        console.log("event.target.value", event.target.value);
+        // console.log("event.target", event.target.selectedIndex);
+        // console.log("event.target.value", event.target.value);
         const newValue = getValue(event, multiple);
-        console.log("newValue", newValue.innerHTML);
+        // console.log("newValue", newValue.innerHTML);
         onChange(newValue.innerHTML);
+        // event.target.style.visibility = "hidden";   //changed (delete whole line to restore to initial state)
+        console.log(event.target[event.target.selectedIndex].innerHTML);
+        // event.target.value = event.target[event.target.selectedIndex].innerHTML;
       }}>
       {!multiple && !schema.default && <option value="">{placeholder}</option>}
       {enumOptions.map(({value, label}, i) => {
-        return <option key={i} value={value} data-label={label}>{label}</option>;  //changed (value={value})
+        return <option key={i} value={label} data-label={label}>{label}</option>;  //changed (value={value})
       })}
     </select>
   );
